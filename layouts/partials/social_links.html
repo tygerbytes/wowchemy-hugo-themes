@@ -5,13 +5,17 @@
     {{ if in (slice "fab" "fas" "far" "fal") $pack }}
       {{ $pack_prefix = "fa" }}
     {{ end }}
+    {{ $rel := "noopener" }}
+    {{ if .rel }}
+      {{ $rel = .rel }}
+    {{ end }}
     {{ $link := .link }}
     {{ $scheme := (urls.Parse $link).Scheme }}
     {{ $target := "" }}
     {{ if not $scheme }}
       {{ $link = .link | relLangURL }}
     {{ else if in (slice "http" "https") $scheme }}
-      {{ $target = "target=\"_blank\" rel=\"noopener\"" }}
+      {{ $target = (printf "target=\"_blank\" rel=\"%s\"" $rel) }}
     {{ end }}
     <li>
       <a href="{{ $link | safeURL }}" {{ $target | safeHTMLAttr }}>
